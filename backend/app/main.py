@@ -1,4 +1,6 @@
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,9 +17,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
+frontend_origin = os.getenv("FRONTEND_ORIGIN", "")
+
+allowed_origins = ["http://localhost:5173"]
+
+if frontend_origin:
+    allowed_origins.append(frontend_origin.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
